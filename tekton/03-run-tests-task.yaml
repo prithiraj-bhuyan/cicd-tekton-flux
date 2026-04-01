@@ -1,0 +1,18 @@
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  name: run-tests
+  namespace: default
+spec:
+  description: >-
+    Runs pytest on our FastAPI hello world app.
+  workspaces:
+    - name: source
+  steps:
+    - name: run-fastapi-tests
+      image: python:3.11-slim
+      workingDir: $(workspaces.source.path)/app
+      script: |
+        set -euxo pipefail
+        pip install -r requirements.txt
+        pytest test_main.py -v

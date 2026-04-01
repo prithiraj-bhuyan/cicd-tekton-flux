@@ -1,0 +1,55 @@
+apiVersion: tekton.dev/v1beta1
+kind: Pipeline
+metadata:
+  name: hello-ci
+  namespace: default
+spec:
+  params:
+    - name: repo-url
+      type: string
+    - name: image-reference
+      type: string
+  workspaces:
+    - name: shared-data
+    - name: git-credentials
+    - name: docker-credentials
+  tasks:
+    # Step 1: Clone the repository
+    - name: fetch-source
+      taskRef:
+        name: git-clone
+      workspaces:
+        - name: output
+          workspace: shared-data
+        - name: ssh-directory
+          workspace: git-credentials
+      params:
+        - name: url
+          value: $(params.repo-url)
+
+    # Step 2: Run tests (must pass before building)
+    - name: run-tests
+      runAfter: ["fetch-source"]
+      taskRef:
+        name: run-tests
+      workspaces:
+        - name: source
+          workspace: shared-data
+
+    # Step 3: Build and push image with Kaniko
+    - name: build-push
+      runAfter: ["run-tests"]
+      taskRef:
+        name: kaniko
+      workspaces:
+        - name: source
+          workspace: shared-data
+        - name: dockerconfig
+          workspace: docker-credentials
+      params:
+        - name: IMAGE
+          value: $(params.image-reference)/hello-app:$(tasks.fetch-source.results.committer-date)-$(tasks.fetch-source.results.commit)
+        - name: DOCKERFILE
+          value: ./app/Dockerfile
+        - name: CONTEXT
+          value: ./app

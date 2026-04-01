@@ -1,0 +1,11 @@
+apiVersion: image.toolkit.fluxcd.io/v1beta2
+kind: ImageRepository
+metadata:
+  name: hello-app
+  namespace: flux-system
+spec:
+  image: YOUR_ACR_NAME.azurecr.io/hello-app  # <-- CHANGE THIS
+  interval: 2m
+  provider: generic
+  secretRef:
+    name: flux-acr-auth

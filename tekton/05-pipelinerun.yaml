@@ -1,0 +1,31 @@
+apiVersion: tekton.dev/v1beta1
+kind: PipelineRun
+metadata:
+  generateName: hello-ci-
+  namespace: default
+spec:
+  pipelineRef:
+    name: hello-ci
+  podTemplate:
+    securityContext:
+      fsGroup: 65532
+  workspaces:
+    - name: shared-data
+      volumeClaimTemplate:
+        spec:
+          accessModes:
+            - ReadWriteOnce
+          resources:
+            requests:
+              storage: 1Gi
+    - name: git-credentials
+      secret:
+        secretName: git-credentials
+    - name: docker-credentials
+      secret:
+        secretName: docker-credentials
+  params:
+    - name: repo-url
+      value: git@github.com:YOUR_GITHUB_USERNAME/hello-cicd.git  # <-- CHANGE THIS
+    - name: image-reference
+      value: YOUR_ACR_NAME.azurecr.io  # <-- CHANGE THIS

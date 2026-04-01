@@ -26,6 +26,6 @@ spec:
         secretName: docker-credentials
   params:
     - name: repo-url
-      value: git@github.com:YOUR_GITHUB_USERNAME/hello-cicd.git  # <-- CHANGE THIS
+      value: git@github.com:prithiraj-bhuyan/cicd-tekton-flux.git  # <-- CHANGE THIS
     - name: image-reference
-      value: YOUR_ACR_NAME.azurecr.io  # <-- CHANGE THIS
+      value: cloudnativeacr2.azurecr.io  # <-- CHANGE THIS

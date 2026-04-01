@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
         - name: hello-app
-          image: YOUR_ACR_NAME.azurecr.io/hello-app:latest # {"$imagepolicy": "flux-system:helloimagepol"}
+          image: cloudnativeacr2.azurecr.io/hello-app:latest # {"$imagepolicy": "flux-system:helloimagepol"}
           ports:
             - containerPort: 8000
           readinessProbe:

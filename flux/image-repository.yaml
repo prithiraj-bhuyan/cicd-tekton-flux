@@ -4,7 +4,7 @@ metadata:
   name: hello-app
   namespace: flux-system
 spec:
-  image: YOUR_ACR_NAME.azurecr.io/hello-app  # <-- CHANGE THIS
+  image: cloudnativeacr2.azurecr.io/hello-app  # <-- CHANGE THIS
   interval: 2m
   provider: generic
   secretRef:
